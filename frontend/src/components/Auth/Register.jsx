@@ -83,7 +83,7 @@ function Register() {
             />
           </div>
           
-          <div className="form-group">
+          {/* <div className="form-group">
             <label htmlFor="confirmPassword">Confirm Password</label>
             <input
               type="password"
@@ -93,7 +93,7 @@ function Register() {
               onChange={handleChange}
               placeholder="Confirm your password"
             />
-          </div>
+          </div> */}
           
           <button type="submit" className="register-button">Register</button>
         </form>
