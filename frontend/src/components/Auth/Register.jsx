@@ -1,13 +1,14 @@
 // Register component with centered container
 import React, { useState } from 'react';
 import '../CSS/Register.css';
+import axios from 'axios';
+import BASE_URL from '../../common/baseURL';
 
 function Register() {
   const [formData, setFormData] = useState({
     username: '',
     email: '',
-    password: '',
-    confirmPassword: ''
+    password: ''
   });
   
   const [error, setError] = useState('');
@@ -20,23 +21,28 @@ function Register() {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-    
+
     // Basic validation
-    if (!formData.username || !formData.email || !formData.password || !formData.confirmPassword) {
+    if (!formData.username || !formData.email || !formData.password) {
       setError('Please fill in all fields');
       return;
     }
-    
-    if (formData.password !== formData.confirmPassword) {
-      setError('Passwords do not match');
-      return;
+
+    try {
+      const response = await axios.post(`${BASE_URL}/api/auth/register`, {
+        username: formData.username,
+        email: formData.email,
+        password: formData.password
+      });
+      alert('Registration successful!');
+      console.log('Register response:', response.data);
+      // Optionally, redirect or clear form here
+    } catch (err) {
+      setError(err.response?.data?.error || 'Registration failed');
     }
-    
-    console.log('Register attempt with:', formData);
-    alert('Registration successful!');
   };
 
   return (
@@ -82,18 +88,6 @@ function Register() {
               placeholder="Enter your password"
             />
           </div>
-          
-          {/* <div className="form-group">
-            <label htmlFor="confirmPassword">Confirm Password</label>
-            <input
-              type="password"
-              id="confirmPassword"
-              name="confirmPassword"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              placeholder="Confirm your password"
-            />
-          </div> */}
           
           <button type="submit" className="register-button">Register</button>
         </form>

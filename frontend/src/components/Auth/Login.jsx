@@ -1,6 +1,7 @@
-// Simple Login Page Component
 import React, { useState } from 'react';
-import '../CSS/Login.css'; // You can create this CSS file for styling
+import '../CSS/Login.css';
+import axios from 'axios';
+import BASE_URL from '../../common/baseURL';
 
 function LoginPage() {
   const [formData, setFormData] = useState({
@@ -18,7 +19,7 @@ function LoginPage() {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     
@@ -28,11 +29,17 @@ function LoginPage() {
       return;
     }
     
-    // Here you would typically handle authentication
-    console.log('Login attempt with:', formData);
-    
-    // Simulate login success (replace with actual authentication)
-    alert('Login successful!');
+    try {
+      const response = await axios.post(`${BASE_URL}/api/auth/login`, {
+        username: formData.username,
+        password: formData.password
+      });
+      alert('Login successful!');
+      // Optionally, store token: localStorage.setItem('token', response.data.token);
+      // Redirect user or update UI here
+    } catch (err) {
+      setError(err.response?.data?.error || 'Login failed');
+    }
   };
 
   return (
